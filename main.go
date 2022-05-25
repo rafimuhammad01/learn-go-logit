@@ -33,6 +33,7 @@ func makeLogEntry(c echo.Context) *logrus.Entry {
 			"method": c.Request().Method,
 			"param":  c.Request().URL.Query(),
 			"body":   c.Request().Body,
+			"host":   c.Request().Host,
 		}))
 	}
 
@@ -57,6 +58,10 @@ func main() {
 	if err != nil {
 		makeLogEntry(nil).Error("Error loading .env file")
 	}
+
+	e.GET("/", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, fmt.Sprintf("<h1>Selamat Datang</h1>"))
+	})
 
 	e.GET("/echo", func(c echo.Context) error {
 		param := c.QueryParam("param")
